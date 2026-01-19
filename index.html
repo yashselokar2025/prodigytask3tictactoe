@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forest Tic Tac Toe</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="app" class="min-h-screen">
+    <div id="particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+    <div id="celebration" class="absolute inset-0 pointer-events-none z-50 hidden"></div>
+    <div class="absolute inset-0 pointer-events-none">
+      <div id="ray1" class="ray"></div>
+      <div id="ray2" class="ray"></div>
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20 pointer-events-none"></div>
+    <div class="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
+      <div class="text-center mb-6">
+        <h1 class="text-6xl font-bold text-amber-100 mb-4 drop-shadow-2xl game-title">
+          Forest Tic Tac Toe
+        </h1>
+        <div class="flex gap-3 justify-center mb-4 flex-wrap">
+          <button id="soundBtn" class="control-btn bg-emerald-700/80 hover:bg-emerald-600/80" title="Toggle Sound">
+            <svg id="soundIcon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+          </button>
+          
+          <button id="timeBtn" class="control-btn bg-indigo-700/80 hover:bg-indigo-600/80" title="Toggle Day/Night">
+            <svg id="timeIcon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+          
+          <button id="undoBtn" class="control-btn bg-orange-700/80 hover:bg-orange-600/80" title="Undo Move">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+            </svg>
+          </button>
+          
+          <button id="historyBtn" class="control-btn bg-purple-700/80 hover:bg-purple-600/80" title="Move History">
+            📜
+          </button>
+        </div>
+        <div class="flex gap-3 justify-center mb-4 flex-wrap">
+          <button id="pvpBtn" class="mode-btn active">Player vs Player</button>
+          <button id="aiBtn" class="mode-btn">Player vs AI</button>
+        </div>
+        <div id="difficultyPanel" class="hidden flex gap-2 justify-center mb-4">
+          <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+          <button class="difficulty-btn active" data-difficulty="medium">Medium</button>
+          <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+        </div>
+      </div>
+      <div class="flex gap-4 mb-6">
+        <div class="scoreboard-item">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span class="text-amber-100 font-semibold">🌿 Twigs: <span id="scoreX">0</span></span>
+          </div>
+        </div>
+        <div class="scoreboard-item">
+          <span class="text-amber-100 font-semibold">Draws: <span id="scoreDraws">0</span></span>
+        </div>
+        <div class="scoreboard-item">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span class="text-amber-100 font-semibold">🪨 Stones: <span id="scoreO">0</span></span>
+          </div>
+        </div>
+      </div>
+      <div id="historyPanel" class="hidden mb-6 bg-slate-800/90 p-4 rounded-xl border-2 border-emerald-900/40 shadow-xl max-w-md">
+        <h3 class="text-amber-100 font-semibold mb-2">Move History:</h3>
+        <div id="historyList" class="max-h-32 overflow-y-auto space-y-1"></div>
+      </div>
+      <div class="game-board-container mb-6">
+        <div class="game-board-inner">
+          <div id="gameBoard" class="grid grid-cols-3 gap-3"></div>
+          <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute left-1/3 top-0 bottom-0 w-0.5 bg-amber-950/30"></div>
+            <div class="absolute right-1/3 top-0 bottom-0 w-0.5 bg-amber-950/30"></div>
+            <div class="absolute top-1/3 left-0 right-0 h-0.5 bg-amber-950/30"></div>
+            <div class="absolute bottom-1/3 left-0 right-0 h-0.5 bg-amber-950/30"></div>
+          </div>
+        </div>
+      </div>
+      <div class="status-box mb-4">
+        <p id="statusText" class="text-2xl font-semibold text-amber-100 text-center drop-shadow-lg">
+          Current Turn: 🌿 Twigs (X)
+        </p>
+      </div>
+      <div class="flex gap-4">
+        <button id="newGameBtn" class="action-btn bg-gradient-to-br from-emerald-700 to-emerald-800 hover:from-emerald-600 hover:to-emerald-700">
+          New Game 🌲
+        </button>
+        
+        <button id="resetScoresBtn" class="action-btn bg-gradient-to-br from-red-700 to-red-800 hover:from-red-600 hover:to-red-700">
+          Reset Scores 🔄
+        </button>
+      </div>
+      <div class="mt-8 text-emerald-300/70 text-sm text-center">
+        <p id="footerText">Handcrafted with nature • Player vs Player • Total Moves: 0</p>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

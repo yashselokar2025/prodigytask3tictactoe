@@ -1,0 +1,287 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#app {
+  position: relative;
+  background: linear-gradient(to bottom right, #14532d, #065f46, #115e59);
+  transition: background 1s ease;
+}
+
+#app.night {
+  background: linear-gradient(to bottom right, #1e1b4b, #0f172a, #172554);
+}
+
+.game-title {
+  font-family: Georgia, serif;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Control Buttons */
+.control-btn {
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.4);
+}
+
+.control-btn:hover {
+  transform: scale(1.1);
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mode Buttons */
+.mode-btn {
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 2px solid;
+  background: rgba(51, 65, 85, 0.6);
+  border-color: rgba(71, 85, 105, 1);
+  color: rgba(203, 213, 225, 1);
+}
+
+.mode-btn:hover {
+  background: rgba(71, 85, 105, 0.6);
+}
+
+.mode-btn.active {
+  background: #059669;
+  border-color: #34d399;
+  color: white;
+}
+
+/* Difficulty Buttons */
+.difficulty-btn {
+  padding: 0.25rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s;
+  background: rgba(71, 85, 105, 0.6);
+  color: rgba(203, 213, 225, 1);
+}
+
+.difficulty-btn:hover {
+  background: rgba(100, 116, 139, 0.6);
+}
+
+.difficulty-btn.active {
+  background: #d97706;
+  color: white;
+}
+
+/* Scoreboard */
+.scoreboard-item {
+  background: linear-gradient(to bottom right, rgba(30, 41, 59, 0.8), rgba(51, 65, 85, 0.8));
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid rgba(6, 78, 59, 0.4);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+}
+
+/* Game Board Container */
+.game-board-container {
+  background: linear-gradient(to bottom right, #92400e, #78350f);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 4px solid rgba(69, 26, 3, 0.6);
+}
+
+.game-board-inner {
+  position: relative;
+  background: linear-gradient(to bottom right, rgba(113, 63, 18, 0.3), rgba(120, 53, 15, 0.3));
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 2px solid rgba(69, 26, 3, 0.4);
+}
+
+/* Game Cell */
+.game-cell {
+  width: 7rem;
+  height: 7rem;
+  background: linear-gradient(to bottom right, rgba(180, 83, 9, 0.8), rgba(146, 64, 14, 0.8));
+  border-radius: 0.75rem;
+  border: 3px solid rgba(69, 26, 3, 0.5);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-cell:hover:not(.disabled) {
+  background: linear-gradient(to bottom right, rgba(217, 119, 6, 0.8), rgba(180, 83, 9, 0.8));
+  transform: scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.game-cell.disabled {
+  cursor: not-allowed;
+}
+
+.game-cell.winning {
+  animation: winPulse 0.6s ease-in-out infinite;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.6);
+}
+
+/* Symbol Styles */
+.symbol {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+}
+
+.symbol.winning {
+  transform: scale(1.1);
+}
+
+.symbol svg {
+  width: 5rem;
+  height: 5rem;
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04));
+}
+
+/* Preview on hover */
+.preview {
+  opacity: 0.3;
+}
+
+/* Status Box */
+.status-box {
+  background: linear-gradient(to right, rgba(30, 41, 59, 0.6), rgba(51, 65, 85, 0.6));
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  border: 2px solid rgba(6, 78, 59, 0.4);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+}
+
+/* Action Buttons */
+.action-btn {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: 1rem;
+  transition: all 0.3s;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 2px solid;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.action-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Rays */
+.ray {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  pointer-events: none;
+  transition: background 1s ease;
+}
+
+#ray1 {
+  left: 25%;
+  background: linear-gradient(to bottom, rgba(254, 240, 138, 0.2), transparent);
+  transform: skewX(-12deg);
+}
+
+#ray2 {
+  right: 33%;
+  background: linear-gradient(to bottom, rgba(254, 249, 195, 0.15), transparent);
+  transform: skewX(12deg);
+}
+
+#app.night #ray1 {
+  background: linear-gradient(to bottom, rgba(191, 219, 254, 0.1), transparent);
+}
+
+#app.night #ray2 {
+  background: linear-gradient(to bottom, rgba(224, 242, 254, 0.08), transparent);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  50% {
+    transform: translateY(-40px) translateX(-5px);
+  }
+  75% {
+    transform: translateY(-20px) translateX(5px);
+  }
+}
+
+@keyframes winPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(74, 222, 128, 0.3);
+  }
+}
+
+@keyframes celebration {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(360deg);
+  }
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.celebration-leaf {
+  position: absolute;
+  animation: celebration 1s ease-out forwards;
+  color: #4ade80;
+  font-size: 2rem;
+}
+
+/* Utility */
+.hidden {
+  display: none !important;
+}
